@@ -9,6 +9,11 @@
     }
   }
 
+  html {
+  scroll-behavior: smooth;
+}
+
+
   .bg-scroll {
     background-image: url('/stacked-waves-haikei.svg');
     background-size: 200%;
