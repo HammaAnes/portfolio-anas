@@ -38,8 +38,8 @@ export default function Home() {
           {/* INTRODUCTION SECTION */}
           <h2 id="introduction" className="text-2xl font-bold mb-2">Self-Introduction</h2>
           <div className="h-[400px] bg-white/10 rounded-xl p-6 flex gap-7">
-            
-            <div className="self-center">
+              <img src="/host_anas.jpg" alt="anas" className="rounded-xl w-full h-full" />
+          <div className="self-center">
               <div className="mb-5">
                 <h1>
                   My name is Hamma Abdurahman Anas, currently 22 years old but age is a variable. <br />
