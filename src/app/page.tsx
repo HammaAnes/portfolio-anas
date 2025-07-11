@@ -39,7 +39,7 @@ export default function Home() {
           <h2 id="introduction" className="text-2xl font-bold mb-2">Self-Introduction</h2>
           <div className="h-[400px] bg-white/10 rounded-xl p-6 flex gap-7">
             <div className="max-w-[400px]">
-              <img src="/host_anas.jpg" alt="anas" className="rounded-xl w-full h-full" />
+              <img src="/host_anas.JPG" alt="anas" className="rounded-xl w-full h-full" />
             </div>
             <div className="self-center">
               <div className="mb-5">
