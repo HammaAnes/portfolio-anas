@@ -88,18 +88,17 @@ export default function Home() {
             </div>
             <div className="self-center">
               <div className="mb-5">
-                <h2 className="font-bold">NCS Vice-President</h2>
+                <h2 className="font-bold">End of study Project</h2>
                 <h1>
-                  I actively contributed to the management of club activities. <br />
-                  I helped organize events such as hackathons, workshops, <br />
-                  and networking sessions for students passionate about IT.
+                  For my final year project, I designed and developed a diet recommendation system powered by AI. 
+                  It provided personalized nutrition plans based on user profiles, goals, and dietary restrictions, combining machine learning with health data for smart decision-making.
                 </h1>
               </div>
               <div>
-                <h2 className="font-bold">Internship at AI UNIVERSE</h2>
+                <h2 className="font-bold">Freelance Project</h2>
                 <h1>
-                  Worked with advanced AI systems including Retrieval-Augmented Generation (RAG) <br />
-                  and AI agents. Designed and tested intelligent workflows to integrate LLMs with real-time data.
+                  As a freelance developer, I worked on an AI-based computer vision system that could identify and classify recyclable materials using image data.
+                  The project focused on improving sorting efficiency and promoting sustainable recycling through automated detection.
                 </h1>
               </div>
             </div>
