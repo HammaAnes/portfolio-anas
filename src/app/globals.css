@@ -16,8 +16,8 @@
 
   .bg-scroll {
     background-image: url('/stacked-waves-haikei.svg');
-    background-size: cover;
-    background-repeat: repeat;
+    background-size: 400% auto;
+    background-repeat:no-repeat;
     background-position: 0% 0%;
     animation: scrollBackground 30s linear infinite;
   }
