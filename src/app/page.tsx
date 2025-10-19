@@ -102,6 +102,94 @@ export default function Home() {
             </div>
           </div>
 
+        {/* AI AGENTS & CHATBOTS SECTION */}
+        <h2 id="ai-projects" className="text-2xl font-bold mb-2">AI Agents & Chatbots</h2>
+        <div className="bg-white/10 rounded-xl p-6 flex flex-col lg:flex-row gap-6 items-center">
+          <div className="w-full lg:max-w-[500px]">
+            {/* Chatbot demo video */}
+            <video 
+              controls 
+              poster="/chatbot_2.avif" 
+              className="rounded-xl w-full h-auto shadow-lg"
+            >
+              <source src="/simple_chatbot.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div className="text-center lg:text-left">
+            <h3 className="font-bold">Personal AI Chatbot</h3>
+            <p>
+              I built a personalized chatbot using LLMs (Large Language Models) capable of answering 
+              context-aware questions and performing reasoning tasks. 
+              The system integrates a local LLM, and custom instructions (in this case english answers only)
+              for dynamic and adaptive interactions.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white/10 rounded-xl p-6 flex flex-col lg:flex-row gap-6 items-center">
+          <div className="w-full lg:max-w-[500px]">
+            {/* Chatbot demo video */}
+            <video 
+              controls 
+              poster="/chatbot_1.avif" 
+              className="rounded-xl w-full h-auto shadow-lg"
+            >
+              <source src="/Brainy_chatbot.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div className="text-center lg:text-left">
+            <h3 className="font-bold">AI Chatbot with RAG</h3>
+            <p>
+              I built a specialized chatbot designed to answer questions exclusively about a platform called BrainyWriter. 
+              The system leverages Retrieval-Augmented Generation (RAG) to provide accurate, 
+              up-to-date responses by retrieving relevant information from a vector database (VDB) containing all the platform’s documentation and data.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white/10 rounded-xl p-6 flex flex-col lg:flex-row gap-6 items-center">
+          <div className="w-full lg:max-w-[500px]">
+            {/* Chatbot demo video */}
+            <video 
+              controls 
+              poster="/agent.webp" 
+              className="rounded-xl w-full h-auto shadow-lg"
+            >
+              <source src="/AI_Univ_agent.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div className="text-center lg:text-left">
+            <h3 className="font-bold">AI Agents Pipeline</h3>
+            <p>
+              built an AI-driven pipeline composed of multiple agents that process educational content end-to-end. 
+              The system takes a PDF book as input, automatically rephrases and summarizes its content, then converts it into a structured teaching script ready for classroom use. 
+              Additionally, it generates quizzes for each chapter, enabling teachers to assess student understanding efficiently.
+            </p>
+          </div>
+        </div>
+
+        {/* MOBILE APP SECTION */}
+        <h2 id="mobile-app" className="text-2xl font-bold mb-2 mt-12">Mobile Application</h2>
+        <div className="bg-white/10 rounded-xl p-6 flex flex-col lg:flex-row gap-6 items-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full lg:max-w-[500px]">
+            <img src="/app_screenshot1.jpg" alt="mobile app 1" className="rounded-xl shadow-lg" />
+            <img src="/app_screenshot2.jpg" alt="mobile app 2" className="rounded-xl shadow-lg" />
+            <img src="/app_screenshot3.jpg" alt="mobile app 3" className="rounded-xl shadow-lg" />
+          </div>
+          <div className="text-center lg:text-left">
+            <h3 className="font-bold">Diet Recommendation App</h3>
+            <p>
+              A Flutter-based mobile app connected to a Django backend. 
+              It uses AI models to provide personalized diet plans 
+              based on user profiles, goals, and health metrics.
+              <br />
+              Designed with a clean UI and efficient backend integration.
+            </p>
+          </div>
+        </div>
           {/* FOOTER */}
           <footer className="pt-10 text-center text-sm text-white/70">
             © 2025 Anas Hamma
