@@ -174,22 +174,19 @@ export default function Home() {
         {/* MOBILE APP SECTION */}
         <h2 id="mobile-app" className="text-2xl font-bold mb-2 mt-12">Mobile Application</h2>
         <div className="bg-white/10 rounded-xl p-6 flex flex-col lg:flex-row gap-6 items-center">
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full lg:max-w-[500px]">
-            <img src="/app_screenshot1.jpg" alt="mobile app 1" className="rounded-xl shadow-lg" />
-            <img src="/app_screenshot2.jpg" alt="mobile app 2" className="rounded-xl shadow-lg" />
-            <img src="/app_screenshot3.jpg" alt="mobile app 3" className="rounded-xl shadow-lg" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:max-w-[700px]">
+            <img src="/mobile_app1.jpg" alt="mobile app 1" className="rounded-xl shadow-lg w-full h-auto" />
+            <img src="/mobile_app2.jpg" alt="mobile app 2" className="rounded-xl shadow-lg w-full h-auto" />
           </div>
           <div className="text-center lg:text-left">
-            <h3 className="font-bold">Diet Recommendation App</h3>
+            <h3 className="font-bold">Task Management App</h3>
             <p>
-              A Flutter-based mobile app connected to a Django backend. 
-              It uses AI models to provide personalized diet plans 
-              based on user profiles, goals, and health metrics.
-              <br />
-              Designed with a clean UI and efficient backend integration.
+              A Flutter-based task management app that helps users add, delete, and organize tasks, mark them as completed, and track their progress through visual indicators and statistics.
+              Built entirely in Flutter, it offers a smooth, responsive, and intuitive user experience, making daily planning and productivity effortless.
             </p>
           </div>
         </div>
+
           {/* FOOTER */}
           <footer className="pt-10 text-center text-sm text-white/70">
             © 2025 Anas Hamma
