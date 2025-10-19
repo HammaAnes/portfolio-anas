@@ -2,7 +2,7 @@ export default function Home() {
   return (
     <div className="relative w-full min-h-screen text-white">
       {/* Fixed Background */}
-      <div className="fixed inset-0 -z-10 bg-scroll" />
+      <div className="fixed inset-0 -z-10 bg-scroll min-h-screen" />
 
       {/* Navigation */}
       <nav className="mx-3 flex flex-col sm:flex-row justify-center gap-4 py-4 items-center text-center">
