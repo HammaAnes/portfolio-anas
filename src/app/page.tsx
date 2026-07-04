@@ -671,7 +671,7 @@ export default function Home() {
               </span>
               {[
                 "React", "Next.js", "TypeScript", "Tailwind CSS",
-                "NestJS", "Supabase", "Refine", "REST APIs", "PostgreSQL",
+                "Supabase", "Refine", "REST APIs", "PostgreSQL",
               ].map((t) => (
                 <Tag key={t}>{t}</Tag>
               ))}
@@ -691,12 +691,7 @@ export default function Home() {
                 description="Shipped full-featured applications backed by Supabase — auth, real-time subscriptions, row-level security, and file storage without managing infrastructure."
                 tags={["Supabase", "PostgreSQL", "Auth"]}
               />
-              <WebCard
-                icon="🛠️"
-                title="Backend APIs"
-                description="Contributed to and built NestJS-powered backends — designing modular service layers, REST endpoints, guards, and database integrations."
-                tags={["NestJS", "Node.js", "REST"]}
-              />
+
               <WebCard
                 icon="🎨"
                 title="Frontend Interfaces"
