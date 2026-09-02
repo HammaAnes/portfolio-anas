@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Space_Grotesk, Inter } from "next/font/google";
 
 const spaceGrotesk = Space_Grotesk({
@@ -186,6 +187,111 @@ function VideoRow({
   );
 }
 
+function ImageRow({
+  images,
+  title,
+  description,
+  tags,
+  reverse = false,
+}: {
+  images: { src: string; alt: string }[];
+  title: string;
+  description: string;
+  tags: string[];
+  reverse?: boolean;
+}) {
+  const [selectedImage, setSelectedImage] = useState<{ src: string; alt: string } | null>(null);
+
+  // Close lightbox on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedImage(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  return (
+    <>
+      <div
+        className={`flex flex-col ${
+          reverse ? "lg:flex-row-reverse" : "lg:flex-row"
+        } gap-8 items-center rounded-2xl p-8 transition-all duration-300`}
+        style={{
+          background: "#131929",
+          border: "1px solid rgba(255,255,255,0.07)",
+        }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLDivElement).style.borderColor =
+            "rgba(99,102,241,0.25)";
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLDivElement).style.borderColor =
+            "rgba(255,255,255,0.07)";
+        }}
+      >
+        <div
+          className={`w-full lg:w-1/2 shrink-0 grid gap-2 ${
+            images.length > 1 ? "grid-cols-2" : "grid-cols-1"
+          }`}
+        >
+          {images.map((img, i) => (
+            <img
+              key={i}
+              src={img.src}
+              alt={img.alt}
+              onClick={() => setSelectedImage(img)}
+              className="w-full rounded-xl block object-cover aspect-[4/3] cursor-pointer hover:opacity-90 transition-opacity"
+              style={{ filter: "saturate(0.9)" }}
+            />
+          ))}
+        </div>
+        <div className="lg:w-1/2">
+          <h3 className="font-display text-xl font-semibold tracking-tight text-[#E8EDF5] mb-3">
+            {title}
+          </h3>
+          <p className="text-[14px] text-[#7A86A1] leading-[1.75]">{description}</p>
+          <div className="flex flex-wrap gap-1.5 mt-4">
+            {tags.map((t) => (
+              <Tag key={t}>{t}</Tag>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Fullscreen Lightbox Modal */}
+      {selectedImage && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 cursor-zoom-out"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-7xl max-h-[90vh] w-full h-full flex items-center justify-center">
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 text-white/70 hover:text-white bg-black/40 hover:bg-black/60 rounded-full p-2 transition-colors z-10"
+              aria-label="Close full screen view"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <img
+              src={selectedImage.src}
+              alt={selectedImage.alt}
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl cursor-default"
+              onClick={(e) => e.stopPropagation()} // Prevent clicking image from closing modal
+            />
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 function WebCard({
   icon,
   title,
@@ -250,6 +356,111 @@ function WebCard({
   );
 }
 
+/**
+ * Auto-scrolling horizontal strip of screenshots.
+ * - Scrolls continuously (pauses on hover) via a duplicated track + CSS keyframe.
+ * - Clicking a thumbnail opens it fullscreen in a lightbox (click backdrop or
+ *   press Escape to close).
+ * Swap the placehold.co URLs below for real screenshots in /public once you
+ * have them — same convention as the rest of the site ("/screenshot-1.jpg", etc).
+ */
+function ScreenshotMarquee({
+  images,
+}: {
+  images: { src: string; alt: string }[];
+}) {
+  const [selected, setSelected] = useState<{ src: string; alt: string } | null>(
+    null
+  );
+  // Only render the portal client-side (document isn't available during SSR).
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    if (!selected) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelected(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selected]);
+
+  // Duplicate the list so the CSS loop (0% -> -50%) is seamless.
+  const track = [...images, ...images];
+
+  return (
+    <>
+      <div className="marquee-mask relative w-full overflow-hidden">
+        <div className="marquee-track flex gap-5 w-max">
+          {track.map((img, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setSelected(img)}
+              aria-label={`Open ${img.alt} full screen`}
+              className="shrink-0 w-[320px] aspect-[16/10] rounded-2xl overflow-hidden cursor-zoom-in transition-transform duration-300 hover:-translate-y-1"
+              style={{ border: "1px solid rgba(255,255,255,0.08)" }}
+            >
+              <img
+                src={img.src}
+                alt={img.alt}
+                className="w-full h-full object-cover block"
+                style={{ filter: "saturate(0.85)" }}
+                draggable={false}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {mounted &&
+        selected &&
+        createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6 sm:p-12 cursor-zoom-out"
+            style={{
+              background: "rgba(6, 9, 18, 0.94)",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+            }}
+            onClick={() => setSelected(null)}
+          >
+            <img
+              src={selected.src}
+              alt={selected.alt}
+              className="max-w-full max-h-full rounded-xl cursor-default"
+              style={{ boxShadow: "0 30px 80px rgba(0,0,0,0.5)" }}
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              type="button"
+              aria-label="Close"
+              onClick={() => setSelected(null)}
+              className="absolute top-5 right-5 sm:top-8 sm:right-8 w-11 h-11 rounded-full flex items-center justify-center text-[#E8EDF5] text-xl transition-colors duration-200"
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.15)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background =
+                  "rgba(255,255,255,0.12)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background =
+                  "rgba(255,255,255,0.06)";
+              }}
+            >
+              ✕
+            </button>
+          </div>,
+          document.body
+        )}
+    </>
+  );
+}
+
 function TimelineItem({
   tag,
   org,
@@ -285,6 +496,18 @@ function TimelineItem({
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
+
+const SCREENSHOTS = [
+   { src: "web/chakour1.png", alt: "Admin dashboard screenshot" },
+  { src: "web/chakour2.png", alt: "Authentication flow screenshot" },
+   { src: "web/chouhrati1.png", alt: "Data table screenshot" },
+   { src: "web/chouhrati2.png", alt: "API integration screenshot" },
+   { src: "web/chouhrati3.png", alt: "Settings panel screenshot" },
+   { src: "web/dashboard.png", alt: "Multilingual UI screenshot" },
+   { src: "web/login.png", alt: "login screenshot" },
+   // TODO: replace each src above with "/screenshot-1.jpg", "/screenshot-2.jpg", etc.
+   // once your real screenshots are in /public.
+];
 
 export default function Home() {
   const navRef = useRef<HTMLElement>(null);
@@ -395,13 +618,30 @@ export default function Home() {
         }
         .reveal.visible {
           opacity: 1;
-          transform: translateY(0);
+          transform: none;
+        }
+
+        /* Screenshot marquee */
+        .marquee-mask {
+          -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+          mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+        }
+        .marquee-track {
+          animation: marquee-scroll 32s linear infinite;
+        }
+        .marquee-mask:hover .marquee-track {
+          animation-play-state: paused;
+        }
+        @keyframes marquee-scroll {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
         }
 
         @media (prefers-reduced-motion: reduce) {
           .ambient::before, .ambient::after,
           .photo-aura::after { animation: none; }
           .reveal { opacity: 1; transform: none; transition: none; }
+          .marquee-track { animation: none; }
         }
       `}</style>
 
@@ -439,6 +679,8 @@ export default function Home() {
         </nav>
 
         {/* ── PAGE CONTENT ── */}
+        {/* Note: the screenshot marquee below is intentionally full-bleed, so it
+            lives outside the max-w-5xl wrapper. Everything else stays inside it. */}
         <div className="relative z-10 max-w-5xl mx-auto px-6">
 
           {/* ── HERO ── */}
@@ -715,6 +957,33 @@ export default function Home() {
 
           <Divider />
 
+        </div>
+
+        {/* ── SCREENSHOTS (full-bleed, outside the max-w-5xl wrapper) ── */}
+        <section className="py-24" aria-label="Screenshots">
+          <div className="max-w-5xl mx-auto px-6">
+            <div className="reveal">
+              <SectionLabel>Gallery</SectionLabel>
+              <h2
+                className="font-display font-bold tracking-tight text-[#E8EDF5] leading-[1.15] mb-4"
+                style={{ fontSize: "clamp(28px, 3.5vw, 42px)" }}
+              >
+                Screenshots
+              </h2>
+              <p className="text-[16px] text-[#7A86A1] max-w-xl mb-12 leading-[1.7]">
+                A closer look at the interfaces I&apos;ve built. Click any image
+                to view it full screen.
+              </p>
+            </div>
+          </div>
+          <div className="reveal">
+            <ScreenshotMarquee images={SCREENSHOTS} />
+          </div>
+        </section>
+
+        <div className="relative z-10 max-w-5xl mx-auto px-6">
+          <Divider />
+
           {/* ── AI SECTION ── */}
           <section id="ai" className="py-24">
             <div className="reveal">
@@ -758,6 +1027,40 @@ export default function Home() {
                   title="Multi-Agent Educational Pipeline"
                   description="An end-to-end AI pipeline composed of multiple coordinated agents. Input: a PDF book. Output: a rephrased teaching script ready for classroom use, plus auto-generated chapter quizzes for student assessment. Demonstrates orchestration of specialized agents around a shared goal."
                   tags={["AI Agents", "PDF Processing", "Education", "Orchestration"]}
+                />
+              </div>
+              <div className="reveal">
+                {/* TODO: replace poster + src with your actual demo video (e.g. "/imitate_poster.jpg", "/imitate_demo.mp4") */}
+                <VideoRow
+                  poster="https://placehold.co/800x500/131929/818CF8?text=IMITATE+Demo"
+                  src="/ai/imitate.mp4"
+                  title="IMITATE — Voice Cloner"
+                  description="Clone any voice, make it say anything — fully local, fully free. A small webapp that clones a voice from a short audio sample and generates new speech in that voice, in multiple languages. Built as a free, self-hosted alternative to paid voice-cloning services like ElevenLabs."
+                  tags={["Voice Cloning", "TTS", "Self-hosted", "Multilingual"]}
+                  reverse
+                />
+              </div>
+              <div className="reveal">
+                {/* TODO: replace poster + src with your actual demo video (e.g. "/qa_bot_poster.jpg", "/qa_bot_demo.mp4") */}
+                <VideoRow
+                  poster="https://placehold.co/800x500/131929/A78BFA?text=Ask+Anas+Bot"
+                  src="/ai/telegram.mp4"
+                  title="Telegram Q&A Bot — Ask Anas"
+                  description="A Telegram bot linked to an Agno agent that uses Retrieval-Augmented Generation to answer questions specifically about me — my background, skills, and projects. Originally conceived as a voice-driven continuation of IMITATE, it now stands on its own as a focused, RAG-grounded personal assistant."
+                  tags={["Telegram Bot", "Agno", "RAG"]}
+                />
+              </div>
+              <div className="reveal">
+                {/* TODO: replace both srcs with your actual HIRE screenshots (e.g. "/hire-screenshot-1.jpg", "/hire-screenshot-2.jpg") */}
+                <ImageRow
+                  images={[
+                    { src: "/ai/Hire_1.png", alt: "HIRE compatibility analysis screenshot" },
+                    { src: "/ai/Hire_2.png", alt: "HIRE agent pipeline screenshot" },
+                  ]}
+                  title="HIRE — Portfolio Analyser"
+                  description="Paste a candidate's portfolio URL and a job description, and get back a structured compatibility analysis and hiring recommendation — generated by a six-agent LLM pipeline running entirely on local models."
+                  tags={["Multi-agent", "LLM Pipeline", "Local Models"]}
+                  reverse
                 />
               </div>
             </div>
